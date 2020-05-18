@@ -39,6 +39,13 @@ jobs:
           smtpPassword: ${{ secrets.GHOST_SMTP_PASSWORD }}
           smtpService: mailgun
           smtpFromAddress: ghost@funkypenguin.co.nz
+          db:
+            # Why not just let the chart give us a random password? 
+            # Because the data is going to persist in a PVC, even if we delete the helm
+            # release, and when we re-create the helm release, we might actually _want_ our data ;)
+            password: ${{ secrets.GHOST_DB_PASSWORD }}
+            rootUser:
+              password: ${{ secrets.GHOST_DB_ROOT_PASSWORD }}
           service:
             type: ClusterIP # We'll access it via nginx-ingress-controller
           ingress:
