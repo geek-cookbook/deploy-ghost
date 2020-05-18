@@ -1,0 +1,24 @@
+---
+# Note - this is not great, since it allows the holder of the role to technically assign themselves
+# more clusterroles, but it's necessary to allow helm charts to create RBAC entries.
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: helm-deploy-nginx-ingress-controller
+rules:
+  - apiGroups: ["", "rbac.authorization.k8s.io"]
+    resources: ["clusterroles","clusterrolebindings"]
+    verbs: ["*"]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: helm-deploy-nginx-ingress-controller
+roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: helm-deploy-nginx-ingress-controller
+subjects:
+  - kind: ServiceAccount
+    name: helm-deploy-nginx-ingress-controller
+    namespace: nginx-ingress-controller

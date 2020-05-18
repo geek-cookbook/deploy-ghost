@@ -1,0 +1,36 @@
+name: Deploy helm chart to Kubernetes
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  CHART_NAME: '<chart name>'
+  CHART_REPO: '<chart repo url>'
+
+jobs:
+
+  build:
+    name: Deploy chart
+    runs-on: ubuntu-latest
+    steps:
+            
+    - name: 'Deploy chart'
+      uses: 'deliverybot/helm@master'
+      with:
+        release: '${{env.CHART_NAME}}'
+        namespace: '${{env.CHART_NAME}}'
+        helm: 'helm3'
+        chart: '${{env.CHART_NAME}}'
+        repository: '${{env.CHART_REPO}}'
+
+        # Insert values.yaml overrides here, indented as you would in a regular YAML file
+        values: |
+        #   image:
+        #     repository:   <whatever>/<whatever>:<tag>
+
+      # Deployment will use the kubeconfig secret you created in the repo
+      env:
+        KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
+        

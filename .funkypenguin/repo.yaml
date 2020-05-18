@@ -1,0 +1,19 @@
+name: .penguin
+
+readme:
+  template: generic
+  update: true
+  sections:
+    - title: What is this?
+      body: |
+        This is a simple template to create a "deploy repository", which will use GitHub Action to deploy a helm chart into a Kubernetes cluster.
+
+        Features include:
+
+        :checkbox: Deployment uses RBAC to provide a per-service, per-namespace kubeconfig
+    - title: How to use it?
+      body: |
+        Make a new repository from this template
+    - title: Why it exists?
+      body: |
+        To make deployment / update of a helm-deployed app as easy as making a GitHub commit
