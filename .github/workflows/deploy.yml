@@ -28,7 +28,7 @@ jobs:
 
         # Insert values.yaml overrides here, indented as you would in a regular YAML file
         values: |
-          # ghostProtocol: http
+          ghostProtocol: https
           ghostHost: ghost.funkypenguin.co.nz
           ghostUsername: ${{ secrets.GHOST_USERNAME }}
           ghostPassword: ${{ secrets.GHOST_PASSWORD }}
