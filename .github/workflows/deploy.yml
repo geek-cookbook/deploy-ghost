@@ -37,6 +37,7 @@ jobs:
           smtpPort: ${{ secrets.GHOST_SMTP_PORT }}
           smtpUser: ${{ secrets.GHOST_SMTP_USER }}
           smtpPassword: ${{ secrets.GHOST_SMTP_PASSWORD }}
+          smtpService: mailgun
           smtpFromAddress: ghost@funkypenguin.co.nz
           service:
             type: ClusterIP # We'll access it via nginx-ingress-controller
