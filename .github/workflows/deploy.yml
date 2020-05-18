@@ -6,8 +6,9 @@ on:
       - master
 
 env:
-  CHART_NAME: '<chart name>'
-  CHART_REPO: '<chart repo url>'
+  CHART_NAME: 'ghost'
+  CHART_REPO: 'https://charts.bitnami.com/bitnami'
+  INGRESS_HOST: 'ghost.funkypenguin.co.nz'
 
 jobs:
 
@@ -27,8 +28,29 @@ jobs:
 
         # Insert values.yaml overrides here, indented as you would in a regular YAML file
         values: |
-        #   image:
-        #     repository:   <whatever>/<whatever>:<tag>
+          ghostProtocol: https
+          ghostHost: ghost.funkypenguin.co.nz
+          ghostUsername: ${{ secrets.GHOST_USERNAME }}
+          ghostPassword: ${{ secrets.GHOST_PASSWORD }}
+          ghostBlogTitle: Funky Penguin
+          smtpHost: ${{ secrets.GHOST_SMTP_HOST }}
+          smtpPort: ${{ secrets.GHOST_SMTP_PORT }}
+          smtpUser: ${{ secrets.GHOST_SMTP_USER }}
+          smtpPassword: ${{ secrets.GHOST_SMTP_PASSWORD }}
+          smtpFromAddress: ghost@funkypenguin.co.nz
+          service:
+            type: ClusterIP # We'll access it via nginx-ingress-controller
+          ingress:
+            ## Set to true to enable ingress record generation
+            enabled: true
+            hosts:
+              - name: '${{ env.INGRESS_HOST }}'
+                path: /
+                tls: true
+                tlsSecret: letsencrypt-wildcard-cert
+            annotations:
+              kubernetes.io/ingress.class: nginx
+              cert-manager.io/cluster-issuer: "letsencrypt-prod"
 
       # Deployment will use the kubeconfig secret you created in the repo
       env:
