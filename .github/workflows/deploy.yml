@@ -61,6 +61,7 @@ jobs:
             annotations:
               kubernetes.io/ingress.class: nginx
               cert-manager.io/cluster-issuer: "letsencrypt-prod"
+              external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
 
       # Deployment will use the kubeconfig secret you created in the repo
       env:
