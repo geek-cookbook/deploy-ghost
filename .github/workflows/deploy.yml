@@ -33,6 +33,7 @@ jobs:
           ghostPort: 443
           ghostHost: ghost.funkypenguin.co.nz
           ghostUsername: ${{ secrets.GHOST_USERNAME }}
+          ghostEmail: ${{ secrets.GHOST_EMAIL }}
           ghostPassword: ${{ secrets.GHOST_PASSWORD }}
           ghostBlogTitle: Funky Penguin
           smtpHost: ${{ secrets.GHOST_SMTP_HOST }}
