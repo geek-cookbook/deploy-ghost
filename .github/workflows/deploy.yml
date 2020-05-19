@@ -9,7 +9,7 @@ env:
   CHART_NAME: 'ghost'
   CHART_REPO: 'https://geek-cookbook.github.io/helm-ghost'
   # CHART_REPO: 'https://charts.bitnami.com/bitnami'
-  INGRESS_HOST: 'ghost.funkypenguin.co.nz'
+  INGRESS_HOST: 'friends.funkypenguin.co.nz'
 
 jobs:
 
