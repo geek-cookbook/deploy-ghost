@@ -31,7 +31,7 @@ jobs:
         values: |
           ghostProtocol: https
           ghostPort: 443
-          ghostHost: ghost.funkypenguin.co.nz
+          ghostHost: friends.funkypenguin.co.nz
           ghostUsername: ${{ secrets.GHOST_USERNAME }}
           ghostEmail: ${{ secrets.GHOST_EMAIL }}
           ghostPassword: ${{ secrets.GHOST_PASSWORD }}
@@ -41,7 +41,7 @@ jobs:
           smtpUser: ${{ secrets.GHOST_SMTP_USER }}
           smtpPassword: ${{ secrets.GHOST_SMTP_PASSWORD }}
           smtpService: mailgun
-          smtpFromAddress: ghost@funkypenguin.co.nz
+          smtpFromAddress: friends@funkypenguin.co.nz
           db:
             # Why not just let the chart give us a random password? 
             # Because the data is going to persist in a PVC, even if we delete the helm
@@ -49,6 +49,8 @@ jobs:
             password: ${{ secrets.GHOST_DB_PASSWORD }}
             rootUser:
               password: ${{ secrets.GHOST_DB_ROOT_PASSWORD }}
+            persistence:
+              size: 1Gi              
           service:
             type: ClusterIP # We'll access it via nginx-ingress-controller
           ingress:
@@ -62,6 +64,8 @@ jobs:
             annotations:
               kubernetes.io/ingress.class: nginx
               cert-manager.io/cluster-issuer: "letsencrypt-prod"
+            persistence:
+              size: 1Gi
 
       # Deployment will use the kubeconfig secret you created in the repo
       env:
