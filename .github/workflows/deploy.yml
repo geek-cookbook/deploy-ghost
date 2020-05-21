@@ -4,21 +4,40 @@ on:
   push:
     branches:
       - master
+    paths:
+      - '.github/workflows/deploy.yml'
+  watch:
+    types: [started]      
 
 env:
   CHART_NAME: 'ghost'
   CHART_REPO: 'https://geek-cookbook.github.io/helm-ghost'
+  # Until I PR the fix for the updatestrategy
   # CHART_REPO: 'https://charts.bitnami.com/bitnami'
   INGRESS_HOST: 'friends.funkypenguin.co.nz'
+  KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
 
 jobs:
+  # Since we're allowing the workflow to be triggered with a star, only trigger if a collaborator performed
+  # the action which triggered us (https://stackoverflow.com/questions/58933155/manual-workflow-triggers-in-github-actions/58965362#58965362)
+  i-can-haz-access:
+    runs-on: ubuntu-latest
 
-  build:
+    steps:
+    - uses: octokit/request-action@v2.0.0
+      with:
+        route: GET /repos/:repository/collaborators/${{ github.actor }}
+        repository: ${{ github.repository }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  cr-deploy-chart:
+    needs: [i-can-haz-access] # Don't proceed unless authorize step above passed
     name: Deploy chart
     runs-on: ubuntu-latest
     steps:
             
-    - name: 'Deploy chart'
+    - name: 'Install chart'
       uses: 'deliverybot/helm@master'
       with:
         release: '${{env.CHART_NAME}}'
@@ -31,7 +50,7 @@ jobs:
         values: |
           ghostProtocol: https
           ghostPort: 443
-          ghostHost: friends.funkypenguin.co.nz
+          ghostHost: $ {{ env.INGRESS_HOST }}
           ghostUsername: ${{ secrets.GHOST_USERNAME }}
           ghostEmail: ${{ secrets.GHOST_EMAIL }}
           ghostPassword: ${{ secrets.GHOST_PASSWORD }}
@@ -41,7 +60,7 @@ jobs:
           smtpUser: ${{ secrets.GHOST_SMTP_USER }}
           smtpPassword: ${{ secrets.GHOST_SMTP_PASSWORD }}
           smtpService: mailgun
-          smtpFromAddress: friends@funkypenguin.co.nz
+          smtpFromAddress: noreply@funkypenguin.co.nz
           db:
             # Why not just let the chart give us a random password? 
             # Because the data is going to persist in a PVC, even if we delete the helm
@@ -66,9 +85,3 @@ jobs:
               cert-manager.io/cluster-issuer: "letsencrypt-prod"
             persistence:
               size: 1Gi
-
-      # Deployment will use the kubeconfig secret you created in the repo
-      env:
-        KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
-        
-
