@@ -48,6 +48,10 @@ jobs:
 
         # Insert values.yaml overrides here, indented as you would in a regular YAML file
         values: |
+        resources:
+          requests:
+            memory: 64Mi
+            cpu: 100m        
           ghostProtocol: https
           ghostPort: 443
           ghostHost: $ {{ env.INGRESS_HOST }}
@@ -61,15 +65,17 @@ jobs:
           smtpPassword: ${{ secrets.GHOST_SMTP_PASSWORD }}
           smtpService: mailgun
           smtpFromAddress: noreply@funkypenguin.co.nz
-          db:
-            # Why not just let the chart give us a random password? 
-            # Because the data is going to persist in a PVC, even if we delete the helm
-            # release, and when we re-create the helm release, we might actually _want_ our data ;)
-            password: ${{ secrets.GHOST_DB_PASSWORD }}
-            rootUser:
-              password: ${{ secrets.GHOST_DB_ROOT_PASSWORD }}
-            persistence:
-              size: 1Gi              
+          mariadb:
+            db:
+              # Why not just let the chart give us a random password? 
+              # Because the data is going to persist in a PVC, even if we delete the helm
+              # release, and when we re-create the helm release, we might actually _want_ our data ;)
+              password: ${{ secrets.GHOST_DB_PASSWORD }}
+              rootUser:
+                password: ${{ secrets.GHOST_DB_ROOT_PASSWORD }}
+              master:
+                persistence:
+                  size: 1Gi              
           service:
             type: ClusterIP # We'll access it via nginx-ingress-controller
           ingress:
@@ -83,5 +89,5 @@ jobs:
             annotations:
               kubernetes.io/ingress.class: nginx
               cert-manager.io/cluster-issuer: "letsencrypt-prod"
-            persistence:
-              size: 1Gi
+          persistence:
+            size: 1Gi
