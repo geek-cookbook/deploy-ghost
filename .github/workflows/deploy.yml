@@ -14,7 +14,7 @@ env:
   CHART_REPO: 'https://geek-cookbook.github.io/helm-ghost'
   # Until I PR the fix for the updatestrategy
   # CHART_REPO: 'https://charts.bitnami.com/bitnami'
-  INGRESS_HOST: 'friends.funkypenguin.co.nz'
+  INGRESS_HOST: 'dev-ghost.funkypenguin.co.nz'
   KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
 
 jobs:
