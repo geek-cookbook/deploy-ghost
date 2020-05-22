@@ -48,10 +48,10 @@ jobs:
 
         # Insert values.yaml overrides here, indented as you would in a regular YAML file
         values: |
-        resources:
-          requests:
-            memory: 64Mi
-            cpu: 100m        
+          resources:
+            requests:
+              memory: 64Mi
+              cpu: 100m        
           ghostProtocol: https
           ghostPort: 443
           ghostHost: $ {{ env.INGRESS_HOST }}
