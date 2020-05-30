@@ -73,9 +73,9 @@ jobs:
               password: ${{ secrets.GHOST_DB_PASSWORD }}
               rootUser:
                 password: ${{ secrets.GHOST_DB_ROOT_PASSWORD }}
-              master:
-                persistence:
-                  size: 1Gi              
+            master:
+              persistence:
+                size: 1Gi              
           service:
             type: ClusterIP # We'll access it via nginx-ingress-controller
           ingress:
