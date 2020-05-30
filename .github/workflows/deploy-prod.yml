@@ -5,7 +5,7 @@ on:
     branches:
       - master
     paths:
-      - '.github/workflows/deploy.yml'
+      - '.github/workflows/deploy-prod.yml'
   watch:
     types: [started]      
 
@@ -14,7 +14,7 @@ env:
   CHART_REPO: 'https://geek-cookbook.github.io/helm-ghost'
   # Until I PR the fix for the updatestrategy
   # CHART_REPO: 'https://charts.bitnami.com/bitnami'
-  INGRESS_HOST: 'dev-ghost.funkypenguin.co.nz'
+  INGRESS_HOST: 'ghost.funkypenguin.co.nz'
   KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
 
 jobs:
