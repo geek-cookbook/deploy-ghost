@@ -15,7 +15,7 @@ env:
   # Until I PR the fix for the updatestrategy
   # CHART_REPO: 'https://charts.bitnami.com/bitnami'
   INGRESS_HOST: 'dev-ghost.funkypenguin.co.nz'
-  KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
+  KUBECONFIG_FILE: '${{ secrets.DEV_KUBECONFIG }}'
 
 jobs:
   # Since we're allowing the workflow to be triggered with a star, only trigger if a collaborator performed
@@ -41,7 +41,7 @@ jobs:
       uses: 'deliverybot/helm@master'
       with:
         release: '${{env.CHART_NAME}}'
-        namespace: '${{env.CHART_NAME}}'
+        namespace: 'dev-${{env.CHART_NAME}}'
         helm: 'helm3'
         chart: '${{env.CHART_NAME}}'
         repository: '${{env.CHART_REPO}}'
@@ -55,7 +55,7 @@ jobs:
           ghostProtocol: https
           ghostPort: 443
           ghostHost: ${{ env.INGRESS_HOST }}
-          ghostUsername: ${{ secrets.DEV_GHOST_USERNAME }}
+          ghostUsername: ${{ secrets.GHOST_USERNAME }}
           ghostEmail: ${{ secrets.GHOST_EMAIL }}
           ghostPassword: ${{ secrets.DEV_GHOST_PASSWORD }}
           ghostBlogTitle: Funky Penguin
@@ -70,9 +70,9 @@ jobs:
               # Why not just let the chart give us a random password? 
               # Because the data is going to persist in a PVC, even if we delete the helm
               # release, and when we re-create the helm release, we might actually _want_ our data ;)
-              password: ${{ secrets.DEV_GHOST_DB_PASSWORD }}
+              password: ${{ secrets.GHOST_DB_PASSWORD }}
               rootUser:
-                password: ${{ secrets.DEV_GHOST_DB_ROOT_PASSWORD }}
+                password: ${{ secrets.GHOST_DB_ROOT_PASSWORD }}
             master:
               persistence:
                 size: 1Gi              
