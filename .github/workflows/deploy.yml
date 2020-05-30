@@ -54,7 +54,7 @@ jobs:
               cpu: 100m        
           ghostProtocol: https
           ghostPort: 443
-          ghostHost: $ {{ env.INGRESS_HOST }}
+          ghostHost: ${{ env.INGRESS_HOST }}
           ghostUsername: ${{ secrets.GHOST_USERNAME }}
           ghostEmail: ${{ secrets.GHOST_EMAIL }}
           ghostPassword: ${{ secrets.GHOST_PASSWORD }}
