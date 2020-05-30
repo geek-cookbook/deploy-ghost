@@ -17,6 +17,7 @@ env:
   INGRESS_HOST: 'dev-ghost.funkypenguin.co.nz'
   KUBECONFIG_FILE: '${{ secrets.DEV_KUBECONFIG }}'
 
+
 jobs:
   # Since we're allowing the workflow to be triggered with a star, only trigger if a collaborator performed
   # the action which triggered us (https://stackoverflow.com/questions/58933155/manual-workflow-triggers-in-github-actions/58965362#58965362)

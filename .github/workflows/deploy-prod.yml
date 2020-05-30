@@ -6,8 +6,6 @@ on:
       - master
     paths:
       - '.github/workflows/deploy-prod.yml'
-  watch:
-    types: [started]      
 
 env:
   CHART_NAME: 'ghost'
