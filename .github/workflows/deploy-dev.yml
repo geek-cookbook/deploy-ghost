@@ -42,7 +42,7 @@ jobs:
       uses: actions/checkout@master
 
     - name: Build container image
-      run: docker build -t docker.pkg.github.com/${{ github.repository }}/${ env.CHART_NAME }}:${{ github.sha }} .
+      run: docker build -t docker.pkg.github.com/${{ github.repository }}/${{ env.CHART_NAME }}:${{ github.sha }} .
 
     - name: Docker login to GitHub Packages
       env:
@@ -51,7 +51,7 @@ jobs:
       run: docker login docker.pkg.github.com -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
     - name: Push image to GitHub Packages
-      run: docker push docker.pkg.github.com/${{ github.repository }}/${ env.CHART_NAME }}:${{ github.sha }}
+      run: docker push docker.pkg.github.com/${{ github.repository }}/${{ env.CHART_NAME }}:${{ github.sha }}
 
 
   cr-deploy-chart:
