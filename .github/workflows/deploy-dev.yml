@@ -78,14 +78,14 @@ jobs:
             repository: ${{ github.repository }}/${ env.CHART_NAME }}
             tag: ${{ github.sha }}    
           extraEnvVars:
-          - name: AWS_ACCESS_KEY_ID
-            value: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          - name: AWS_ACCESS_SECRET_KEY
-            value: ${{ secrets.AWS_ACCESS_SECRET_KEY }}
-          - name: AWS_REGION
-            value: ${{ secrets.AWS_REGION }}
-          - name: AWS_BUCKET
-            value: ${{ secrets.AWS_BUCKET }}                                    
+            - name: AWS_ACCESS_KEY_ID
+              value: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            - name: AWS_ACCESS_SECRET_KEY
+              value: ${{ secrets.AWS_ACCESS_SECRET_KEY }}
+            - name: AWS_REGION
+              value: ${{ secrets.AWS_REGION }}
+            - name: AWS_BUCKET
+              value: ${{ secrets.AWS_BUCKET }}                                    
           resources:
             requests:
               memory: 64Mi
