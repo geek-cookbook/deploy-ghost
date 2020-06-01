@@ -32,8 +32,32 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  cr-deploy-chart:
+  cr-build-image:
     needs: [i-can-haz-access] # Don't proceed unless authorize step above passed
+    name: Build image
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout master
+      uses: actions/checkout@master
+
+    - name: Build container image
+      run: docker build -t docker.pkg.github.com/${{ github.repository }}/${{ env.CHART_NAME }}:${{ github.sha }} .
+
+    - name: Docker login to GitHub Packages
+      env:
+        DOCKER_USERNAME: ${{ github.actor }}
+        DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+      run: docker login docker.pkg.github.com -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+
+    - name: Push image to GitHub Packages
+      run: docker push docker.pkg.github.com/${{ github.repository }}/${{ env.CHART_NAME }}:${{ github.sha }}
+
+
+  cr-deploy-chart:
+    needs: 
+      - i-can-haz-access # Don't proceed unless authorize step above passed
+      - cr-build-image   # No point proceeding if we don't have an image
     name: Deploy chart
     runs-on: ubuntu-latest
     steps:
@@ -49,6 +73,19 @@ jobs:
 
         # Insert values.yaml overrides here, indented as you would in a regular YAML file
         values: |
+          image:
+            registry: docker.pkg.github.com
+            repository: ${{ github.repository }}/${ env.CHART_NAME }}
+            tag: ${{ github.sha }}    
+          extraEnvVars:
+            - name: AWS_ACCESS_KEY_ID
+              value: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            - name: AWS_ACCESS_SECRET_KEY
+              value: ${{ secrets.AWS_ACCESS_SECRET_KEY }}
+            - name: AWS_REGION
+              value: ${{ secrets.AWS_REGION }}
+            - name: AWS_BUCKET
+              value: ${{ secrets.AWS_BUCKET }}                                    
           resources:
             requests:
               memory: 64Mi
