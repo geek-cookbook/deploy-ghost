@@ -12,7 +12,7 @@ env:
   CHART_REPO: 'https://geek-cookbook.github.io/helm-ghost'
   # Until I PR the fix for the updatestrategy
   # CHART_REPO: 'https://charts.bitnami.com/bitnami'
-  INGRESS_HOST: 'ghost.funkypenguin.co.nz'
+  INGRESS_HOST: 'www.funkypenguin.co.nz'
   KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
 
 jobs:
@@ -87,6 +87,6 @@ jobs:
             annotations:
               kubernetes.io/ingress.class: nginx
               cert-manager.io/cluster-issuer: "letsencrypt-prod"
-              external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
+              nginx.org/client-max-body-size: "10m"
           persistence:
             size: 1Gi
