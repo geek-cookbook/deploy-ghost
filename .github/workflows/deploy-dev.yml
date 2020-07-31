@@ -75,7 +75,7 @@ jobs:
         values: |
           image:
             registry: docker.pkg.github.com
-            repository: ${{ github.repository }}/${ env.CHART_NAME }}
+            repository: ${{ github.repository }}/${{ env.CHART_NAME }}
             tag: ${{ github.sha }}    
           extraEnvVars:
             - name: AWS_ACCESS_KEY_ID
