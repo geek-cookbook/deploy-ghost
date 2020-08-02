@@ -131,6 +131,3 @@ jobs:
               nginx.org/client-max-body-size: "10m"
           persistence:
             size: 1Gi
-
-
-

@@ -19,5 +19,5 @@ USER 1001
 
 RUN cd /bitnami/ghost \
     && npm i --silent ghost-storage-adapter-s3 \ 
-    && mkdir -p /bitnami/ghost/content/adapters/storage/s3 \
-    && cp -r ./node_modules/ghost-storage-adapter-s3/* /bitnami/ghost/content/adapters/storage/s3/ 
+    && mkdir -p /opt/bitnami/ghost/content/adapters/storage/s3 \
+    && cp -r ./node_modules/ghost-storage-adapter-s3/* /opt/bitnami/ghost/content/adapters/storage/s3/ 
