@@ -130,5 +130,4 @@ jobs:
               cert-manager.io/cluster-issuer: "letsencrypt-prod"
               nginx.org/client-max-body-size: "10m"
           persistence:
-            size: 
-              
+            size: 1Gi
