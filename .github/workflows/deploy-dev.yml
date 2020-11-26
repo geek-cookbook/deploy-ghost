@@ -6,6 +6,7 @@ on:
       - dev
     paths:
       - '.github/workflows/deploy-dev.yml'
+      - Dockerfile
   watch:
     types: [started]      
 
