@@ -5,7 +5,4 @@ jq -r --arg keyId $AWS_ACCESS_KEY_ID --arg accessKey $AWS_ACCESS_SECRET_KEY --ar
     '. + { storage: { active: "s3", s3: { accessKeyId: $keyId, secretAccessKey: $accessKey, region: $region, bucket: $bucket } } }' \
     /tmp/config.tmp.json > /bitnami/ghost/config.production.json
 
-cd /bitnami/ghost \
-    && npm i --silent ghost-storage-adapter-s3 \ 
-    && mkdir -p /bitnami/ghost/content/adapters/storage/s3 \
-    && cp -r ./node_modules/ghost-storage-adapter-s3/* /bitnami/ghost/content/adapters/storage/s3/ 
+cp -r /funkypenguin/s3/* /bitnami/ghost/content/adapters/storage/s3/ 

@@ -17,7 +17,8 @@ ENV AWS_ACCESS_KEY_ID="AWS_ACCESS_KEY_ID" \
 
 USER 1001
 
+# We can't use /bitnami/ghost in the pod because it gets overwritten by an emptyDir
 RUN cd /bitnami/ghost \
     && npm i --silent ghost-storage-adapter-s3 \ 
-    && mkdir -p /bitnami/ghost/content/adapters/storage/s3 \
-    && cp -r ./node_modules/ghost-storage-adapter-s3/* /bitnami/ghost/content/adapters/storage/s3/ 
+    && mkdir -p /funkypenguin/s3 \
+    && cp -r ./node_modules/ghost-storage-adapter-s3/* /funkypenguin/s3/ 
