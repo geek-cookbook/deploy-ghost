@@ -21,7 +21,6 @@ env:
 jobs:
 
   cr-build-image:
-    needs: [i-can-haz-access] # Don't proceed unless authorize step above passed
     name: Build image
     runs-on: ubuntu-latest
     steps:
@@ -44,7 +43,6 @@ jobs:
 
   cr-deploy-chart:
     needs: 
-      - i-can-haz-access # Don't proceed unless authorize step above passed
       - cr-build-image   # No point proceeding if we don't have an image
     name: Deploy chart
     runs-on: ubuntu-latest
