@@ -11,7 +11,7 @@ on:
 
 env:
   CHART_NAME: 'ghost'
-  # CHART_REPO: 'https://geek-cookbook.github.io/helm-ghost'
+  #CHART_REPO: 'https://geek-cookbook.github.io/helm-ghost'
   # Until I PR the fix for the updatestrategy
   CHART_REPO: 'https://charts.bitnami.com/bitnami'
   INGRESS_HOST: 'dev-ghost.funkypenguin.co.nz'
@@ -73,10 +73,10 @@ jobs:
               value: ${{ secrets.AWS_REGION }}
             - name: AWS_BUCKET
               value: ${{ secrets.AWS_BUCKET }}                                    
-          resources:
-           requests:
-             memory: 64Mi
-             cpu: 100m        
+          #resources:
+          #  requests:
+          #    memory: 64Mi
+          #    cpu: 100m        
           ghostProtocol: https
           ghostPort: 443
           ghostHost: ${{ env.INGRESS_HOST }}
