@@ -63,7 +63,8 @@ jobs:
             registry: docker.pkg.github.com
             repository: ${{ github.repository }}/${{ env.CHART_NAME }}
             tag: ${{ github.sha }}   
-            pullSecrets: dev-ghost-pullsecret 
+            pullSecrets: 
+            - dev-ghost-pullsecret 
           extraEnvVars:
             - name: AWS_ACCESS_KEY_ID
               value: ${{ secrets.AWS_ACCESS_KEY_ID }}
