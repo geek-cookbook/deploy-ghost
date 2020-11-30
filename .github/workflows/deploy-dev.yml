@@ -97,9 +97,10 @@ jobs:
               # Because the data is going to persist in a PVC, even if we delete the helm
               # release, and when we re-create the helm release, we might actually _want_ our data ;)
               password: ${{ secrets.GHOST_DB_PASSWORD }}
-              rootUser:
-                password: ${{ secrets.GHOST_DB_ROOT_PASSWORD }}
-            master:
+            auth:
+              rootPassword: ${{ secrets.GHOST_DB_ROOT_PASSWORD }}
+              password: ${{ secrets.GHOST_DB_ROOT_PASSWORD }}
+            primary:
               persistence:
                 size: 1Gi              
           service:
