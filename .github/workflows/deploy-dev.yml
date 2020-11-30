@@ -74,10 +74,10 @@ jobs:
               value: ${{ secrets.AWS_REGION }}
             - name: AWS_BUCKET
               value: ${{ secrets.AWS_BUCKET }}                                    
-          #resources:
-          #  requests:
-          #    memory: 64Mi
-          #    cpu: 100m        
+          resources:
+           requests:
+             memory: 150Mi
+             cpu: 100m        
           ghostProtocol: https
           ghostPort: 443
           ghostHost: ${{ env.INGRESS_HOST }}
