@@ -8,3 +8,5 @@ jq -r --arg keyId $AWS_ACCESS_KEY_ID --arg accessKey $AWS_ACCESS_SECRET_KEY --ar
 cd /funkypenguin
 mkdir -p /bitnami/ghost/content/adapters/storage/s3
 cp -r ./node_modules/ghost-storage-adapter-s3/* /bitnami/ghost/content/adapters/storage/s3/
+cd /bitnami/ghost/
+npm install aws-sdk

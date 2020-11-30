@@ -21,4 +21,6 @@ USER 1001
 
 # We can't use /bitnami/ghost in the pod because it gets overwritten by an emptyDir
 RUN cd /funkypenguin \
-    && npm i --silent ghost-storage-adapter-s3
+    && npm i --silent ghost-storage-adapter-s3 &&
+    cd node_modules/ghost-storage-adapter-s3 &&
+    npm install
