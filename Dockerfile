@@ -24,3 +24,4 @@ RUN cd /funkypenguin \
     && npm i --silent ghost-storage-adapter-s3 && \
     cd node_modules/ghost-storage-adapter-s3 && \
     npm install
+
