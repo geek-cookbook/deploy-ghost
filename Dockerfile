@@ -15,7 +15,9 @@ RUN chmod +x /post_ghost_config.sh \
 ENV AWS_ACCESS_KEY_ID="AWS_ACCESS_KEY_ID" \
     AWS_ACCESS_SECRET_KEY="AWS_ACCESS_SECRET_KEY" \
     AWS_REGION="AWS_REGION" \
-    AWS_BUCKET="AWS_BUCKET" 
+    AWS_BUCKET="AWS_BUCKET" \
+    AWS_SIGNATURE_VERSION="v4" \
+    AWS_ASSETHOST="https://static.funkypenguin.co.nz"
 
 USER 1001
 
