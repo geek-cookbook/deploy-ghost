@@ -67,9 +67,9 @@ jobs:
             - dev-ghost-pullsecret 
           extraEnvVars:
             - name: AWS_ACCESS_KEY_ID
-              value: ${{ secrets.AWS_ACCESS_KEY_ID }}
+              value: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
             - name: AWS_ACCESS_SECRET_KEY
-              value: ${{ secrets.AWS_ACCESS_SECRET_KEY }}
+              value: ${{ secrets.DEV_AWS_ACCESS_SECRET_KEY }}
             - name: AWS_REGION
               value: ${{ secrets.AWS_REGION }}
             - name: AWS_BUCKET
