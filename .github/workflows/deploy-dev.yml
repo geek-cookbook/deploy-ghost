@@ -11,15 +11,11 @@ on:
 
 env:
   CHART_NAME: 'ghost'
-  CHART_REPO: 'https://geek-cookbook.github.io/helm-ghost'
-  # Until I PR the fix for the updatestrategy
-  # CHART_REPO: 'https://charts.bitnami.com/bitnami'
   INGRESS_HOST: 'dev-ghost.funkypenguin.co.nz'
   KUBECONFIG_FILE: '${{ secrets.DEV_KUBECONFIG }}'
-
+  CHART_REPO: 'https://charts.bitnami.com/bitnami'
 
 jobs:
-
   cr-build-image:
     name: Build image
     runs-on: ubuntu-latest
@@ -39,7 +35,6 @@ jobs:
 
     - name: Push image to GitHub Packages
       run: docker push docker.pkg.github.com/${{ github.repository }}/${{ env.CHART_NAME }}:${{ github.sha }}
-
 
   cr-deploy-chart:
     needs: 
@@ -119,5 +114,3 @@ jobs:
               nginx.org/client-max-body-size: "10m"
           persistence:
             enabled: false
-
-            
