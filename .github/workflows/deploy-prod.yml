@@ -59,7 +59,7 @@ jobs:
             repository: ${{ github.repository }}/${{ env.CHART_NAME }}
             tag: ${{ github.sha }}   
             pullSecrets: 
-            - dev-ghost-pullsecret 
+            - ghost-pullsecret 
           extraEnvVars:
             - name: AWS_ACCESS_KEY_ID
               value: ${{ secrets.AWS_ACCESS_KEY_ID }}
