@@ -6,34 +6,17 @@ on:
       - dev
     paths:
       - '.github/workflows/deploy-dev.yml'
-  watch:
-    types: [started]      
+      - Dockerfile
+  workflow_dispatch:
 
 env:
   CHART_NAME: 'ghost'
-  CHART_REPO: 'https://geek-cookbook.github.io/helm-ghost'
-  # Until I PR the fix for the updatestrategy
-  # CHART_REPO: 'https://charts.bitnami.com/bitnami'
   INGRESS_HOST: 'dev-ghost.funkypenguin.co.nz'
   KUBECONFIG_FILE: '${{ secrets.DEV_KUBECONFIG }}'
-
+  CHART_REPO: 'https://charts.bitnami.com/bitnami'
 
 jobs:
-  # Since we're allowing the workflow to be triggered with a star, only trigger if a collaborator performed
-  # the action which triggered us (https://stackoverflow.com/questions/58933155/manual-workflow-triggers-in-github-actions/58965362#58965362)
-  i-can-haz-access:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: octokit/request-action@v2.0.0
-      with:
-        route: GET /repos/:repository/collaborators/${{ github.actor }}
-        repository: ${{ github.repository }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   cr-build-image:
-    needs: [i-can-haz-access] # Don't proceed unless authorize step above passed
     name: Build image
     runs-on: ubuntu-latest
     steps:
@@ -53,10 +36,8 @@ jobs:
     - name: Push image to GitHub Packages
       run: docker push docker.pkg.github.com/${{ github.repository }}/${{ env.CHART_NAME }}:${{ github.sha }}
 
-
   cr-deploy-chart:
     needs: 
-      - i-can-haz-access # Don't proceed unless authorize step above passed
       - cr-build-image   # No point proceeding if we don't have an image
     name: Deploy chart
     runs-on: ubuntu-latest
@@ -75,21 +56,23 @@ jobs:
         values: |
           image:
             registry: docker.pkg.github.com
-            repository: ${{ github.repository }}/${ env.CHART_NAME }}
-            tag: ${{ github.sha }}    
+            repository: ${{ github.repository }}/${{ env.CHART_NAME }}
+            tag: ${{ github.sha }}   
+            pullSecrets: 
+            - dev-ghost-pullsecret 
           extraEnvVars:
             - name: AWS_ACCESS_KEY_ID
-              value: ${{ secrets.AWS_ACCESS_KEY_ID }}
+              value: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
             - name: AWS_ACCESS_SECRET_KEY
-              value: ${{ secrets.AWS_ACCESS_SECRET_KEY }}
+              value: ${{ secrets.DEV_AWS_ACCESS_SECRET_KEY }}
             - name: AWS_REGION
               value: ${{ secrets.AWS_REGION }}
             - name: AWS_BUCKET
               value: ${{ secrets.AWS_BUCKET }}                                    
           resources:
-            requests:
-              memory: 64Mi
-              cpu: 100m        
+           requests:
+             memory: 150Mi
+             cpu: 100m        
           ghostProtocol: https
           ghostPort: 443
           ghostHost: ${{ env.INGRESS_HOST }}
@@ -109,9 +92,10 @@ jobs:
               # Because the data is going to persist in a PVC, even if we delete the helm
               # release, and when we re-create the helm release, we might actually _want_ our data ;)
               password: ${{ secrets.GHOST_DB_PASSWORD }}
-              rootUser:
-                password: ${{ secrets.GHOST_DB_ROOT_PASSWORD }}
-            master:
+            auth:
+              rootPassword: ${{ secrets.GHOST_DB_ROOT_PASSWORD }}
+              password: ${{ secrets.GHOST_DB_ROOT_PASSWORD }}
+            primary:
               persistence:
                 size: 1Gi              
           service:
@@ -129,4 +113,4 @@ jobs:
               cert-manager.io/cluster-issuer: "letsencrypt-prod"
               nginx.org/client-max-body-size: "10m"
           persistence:
-            size: 1Gi
+            enabled: false
