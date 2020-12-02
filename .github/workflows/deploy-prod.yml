@@ -108,6 +108,10 @@ jobs:
                 path: /
                 tls: true
                 tlsSecret: letsencrypt-wildcard-cert
+              - name: 'ghost.funkypenguin.co.nz' # temporary
+                path: /
+                tls: true
+                tlsSecret: letsencrypt-wildcard-cert                
             annotations:
               kubernetes.io/ingress.class: nginx
               cert-manager.io/cluster-issuer: "letsencrypt-prod"
