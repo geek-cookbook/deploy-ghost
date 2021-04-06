@@ -118,5 +118,4 @@ jobs:
               nginx.org/client-max-body-size: "10m"
               nginx.ingress.kubernetes.io/proxy-body-size: "10m"
           persistence:
-            enabled: true
-            size: 1Gi
+            enabled: false
