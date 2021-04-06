@@ -59,7 +59,7 @@ jobs:
             repository: ${{ github.repository }}/${{ env.CHART_NAME }}
             tag: ${{ github.sha }}   
             pullSecrets: 
-            - dev-ghost-pullsecret 
+            - ghost-pullsecret 
           extraEnvVars:
             - name: AWS_ACCESS_KEY_ID
               value: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -108,9 +108,14 @@ jobs:
                 path: /
                 tls: true
                 tlsSecret: letsencrypt-wildcard-cert
+              - name: 'ghost.funkypenguin.co.nz' # temporary
+                path: /
+                tls: true
+                tlsSecret: letsencrypt-wildcard-cert                
             annotations:
               kubernetes.io/ingress.class: nginx
               cert-manager.io/cluster-issuer: "letsencrypt-prod"
               nginx.org/client-max-body-size: "10m"
+              nginx.ingress.kubernetes.io/proxy-body-size: "10m"
           persistence:
             enabled: false
