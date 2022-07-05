@@ -8,7 +8,7 @@ RUN mkdir -p /.npm && chmod -R g+rwX,o+rw /.npm
 COPY post_ghost_config.sh /
 RUN chmod +x /post_ghost_config.sh \
     && cp /opt/bitnami/scripts/ghost/entrypoint.sh /tmp/entrypoint.sh \
-    && sed '/info "\*\* Ghost setup finished! \*\*"/ a . /post_ghost_config.sh' /tmp/entrypoint.sh > /opt/bitnami/scripts/ghost/entrypoint.sh
+    && sed '/info "\*\* Ghost setup finished! \*\*"/ a . /post_ghost_config.sh' /tmp/entrypoint.sh > /opt/bitnami/scripts/ghost/entrypoint.sh \
     && mkdir /funkypenguin/ -p \
     && chown -R 1001 /funkypenguin
 
