@@ -102,6 +102,7 @@ jobs:
           ghostPassword: ${{ secrets.GHOST_PASSWORD }}
           ghostBlogTitle: Funky Penguin
           ghostEnableHttps: true
+          updateStrategy: Recreate
           smtpHost: ${{ secrets.GHOST_SMTP_HOST }}
           smtpPort: ${{ secrets.GHOST_SMTP_PORT }}
           smtpUser: ${{ secrets.GHOST_SMTP_USER }}
