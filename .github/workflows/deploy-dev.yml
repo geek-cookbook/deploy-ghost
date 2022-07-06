@@ -44,7 +44,7 @@ jobs:
     steps:
             
     - name: 'Install chart'
-      uses: 'deliverybot/helm@master'
+      uses: 'glopezep/helm@v1.7.1'
       with:
         release: '${{env.CHART_NAME}}'
         namespace: 'dev-${{env.CHART_NAME}}'
