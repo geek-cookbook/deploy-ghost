@@ -105,6 +105,7 @@ jobs:
           smtpPort: ${{ secrets.GHOST_SMTP_PORT }}
           smtpUser: ${{ secrets.GHOST_SMTP_USER }}
           smtpPassword: ${{ secrets.GHOST_SMTP_PASSWORD }}
+          ghostEnableHttps: true
           smtpService: mailgun
           smtpFromAddress: noreply@funkypenguin.co.nz
           mysql:
