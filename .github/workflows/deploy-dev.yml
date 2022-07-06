@@ -107,7 +107,8 @@ jobs:
           smtpPassword: ${{ secrets.GHOST_SMTP_PASSWORD }}
           ghostEnableHttps: true
           smtpService: mailgun
-          updateStrategy: Recreate
+          updateStrategy:
+            type: Recreate
           smtpFromAddress: noreply@funkypenguin.co.nz
           mysql:
               # Why not just let the chart give us a random password? 
