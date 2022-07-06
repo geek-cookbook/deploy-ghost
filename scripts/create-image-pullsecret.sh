@@ -40,7 +40,7 @@ then
 fi
 
 kubectl -n $service create secret docker-registry $service-pullsecret \
-            --docker-server=docker.pkg.github.com \
+            --docker-server=ghcr.io \
             --docker-username="$username" \
             --docker-password="$token" \
             --dry-run -o yaml | kubectl apply -f - 

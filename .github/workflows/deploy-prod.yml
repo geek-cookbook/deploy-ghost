@@ -1,4 +1,4 @@
-name: Deploy helm chart to Kubernetes
+name: Deploy prod
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     paths:
       - '.github/workflows/deploy-prod.yml'
       - Dockerfile
-  workflow_dispatch:      
+  workflow_dispatch:
 
 env:
   CHART_NAME: 'ghost'
@@ -25,16 +25,37 @@ jobs:
       uses: actions/checkout@master
 
     - name: Build container image
-      run: docker build -t docker.pkg.github.com/${{ github.repository }}/${{ env.CHART_NAME }}:${{ github.sha }} .
+      run: docker build -t ghcr.io/${{ github.repository }}/${{ env.CHART_NAME }}:${{ github.sha }} .
 
     - name: Docker login to GitHub Packages
       env:
         DOCKER_USERNAME: ${{ github.actor }}
         DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-      run: docker login docker.pkg.github.com -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      run: docker login ghcr.io -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
+    # - name: Log in to the Container registry
+    #   uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+    #   with:
+    #     registry: ${{ env.REGISTRY }}
+    #     username: ${{ github.actor }}
+    #     password: ${{ secrets.GITHUB_TOKEN }}
+
+    # - name: Extract metadata (tags, labels) for Docker
+    #   id: meta
+    #   uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+    #   with:
+    #     images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+    # - name: Build and push Docker image
+    #   uses: docker/build-push-action@v3
+    #   with:
+    #     context: .
+    #     push: true
+    #     tags: ${{ steps.meta.outputs.tags }}
+    #     labels: ${{ steps.meta.outputs.labels }} 
+                
     - name: Push image to GitHub Packages
-      run: docker push docker.pkg.github.com/${{ github.repository }}/${{ env.CHART_NAME }}:${{ github.sha }}
+      run: docker push ghcr.io/${{ github.repository }}/${{ env.CHART_NAME }}:${{ github.sha }}
 
   cr-deploy-chart:
     needs: 
@@ -44,7 +65,7 @@ jobs:
     steps:
             
     - name: 'Install chart'
-      uses: 'deliverybot/helm@master'
+      uses: 'glopezep/helm@v1.7.1' # See https://github.com/deliverybot/helm/issues/66
       with:
         release: '${{env.CHART_NAME}}'
         namespace: '${{env.CHART_NAME}}'
@@ -55,7 +76,7 @@ jobs:
         # Insert values.yaml overrides here, indented as you would in a regular YAML file
         values: |
           image:
-            registry: docker.pkg.github.com
+            registry: ghcr.io
             repository: ${{ github.repository }}/${{ env.CHART_NAME }}
             tag: ${{ github.sha }}   
             pullSecrets: 
@@ -68,11 +89,11 @@ jobs:
             - name: AWS_REGION
               value: ${{ secrets.AWS_REGION }}
             - name: AWS_BUCKET
-              value: ${{ secrets.AWS_BUCKET }}
+              value: ${{ secrets.AWS_BUCKET }}                                    
           resources:
-            requests:
-              memory: 150Mi
-              cpu: 100m        
+           requests:
+             memory: 150Mi
+             cpu: 100m        
           ghostProtocol: https
           ghostPort: 443
           ghostHost: ${{ env.INGRESS_HOST }}
@@ -86,13 +107,12 @@ jobs:
           smtpPassword: ${{ secrets.GHOST_SMTP_PASSWORD }}
           smtpService: mailgun
           smtpFromAddress: noreply@funkypenguin.co.nz
-          mariadb:
-            db:
+          mysql:
               # Why not just let the chart give us a random password? 
               # Because the data is going to persist in a PVC, even if we delete the helm
               # release, and when we re-create the helm release, we might actually _want_ our data ;)
-              password: ${{ secrets.GHOST_DB_PASSWORD }}
             auth:
+              password: ${{ secrets.GHOST_DB_PASSWORD }}
               rootPassword: ${{ secrets.GHOST_DB_ROOT_PASSWORD }}
               password: ${{ secrets.GHOST_DB_ROOT_PASSWORD }}
             primary:
@@ -108,12 +128,11 @@ jobs:
             extraTls:
             - hosts: 
               - '${{ env.INGRESS_HOST }}' 
-              secretName: letsencrypt-wildcard-cert             
+              secretName: letsencrypt-wildcard-cert
             annotations:
               kubernetes.io/ingress.class: nginx
               cert-manager.io/cluster-issuer: "letsencrypt-prod"
-              nginx.org/client-max-body-size: "10m"
-              nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+              nginx.ingress.kubernetes.io/proxy-body-size: 10m
           persistence:
             enabled: true
             size: 1Gi
