@@ -40,22 +40,22 @@ jobs:
     #     username: ${{ github.actor }}
     #     password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Extract metadata (tags, labels) for Docker
-      id: meta
-      uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
-      with:
-        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+    # - name: Extract metadata (tags, labels) for Docker
+    #   id: meta
+    #   uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+    #   with:
+    #     images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v3
-      with:
-        context: .
-        push: true
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }} 
+    # - name: Build and push Docker image
+    #   uses: docker/build-push-action@v3
+    #   with:
+    #     context: .
+    #     push: true
+    #     tags: ${{ steps.meta.outputs.tags }}
+    #     labels: ${{ steps.meta.outputs.labels }} 
                 
-    # - name: Push image to GitHub Packages
-    #   run: docker push ghcr.io/${{ github.repository }}/${{ env.CHART_NAME }}:${{ github.sha }}
+    - name: Push image to GitHub Packages
+      run: docker push ghcr.io/${{ github.repository }}/${{ env.CHART_NAME }}:${{ github.sha }}
 
   cr-deploy-chart:
     needs: 
