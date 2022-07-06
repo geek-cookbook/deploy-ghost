@@ -107,13 +107,12 @@ jobs:
           smtpPassword: ${{ secrets.GHOST_SMTP_PASSWORD }}
           smtpService: mailgun
           smtpFromAddress: noreply@funkypenguin.co.nz
-          mariadb:
-            db:
+          mysql:
               # Why not just let the chart give us a random password? 
               # Because the data is going to persist in a PVC, even if we delete the helm
               # release, and when we re-create the helm release, we might actually _want_ our data ;)
-              password: ${{ secrets.GHOST_DB_PASSWORD }}
             auth:
+              password: ${{ secrets.GHOST_DB_PASSWORD }}
               rootPassword: ${{ secrets.GHOST_DB_ROOT_PASSWORD }}
               password: ${{ secrets.GHOST_DB_ROOT_PASSWORD }}
             primary:
