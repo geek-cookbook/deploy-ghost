@@ -46,4 +46,3 @@ Make a new repository from this template
 
 To make deployment / update of a helm-deployed app as easy as making a GitHub commit
 
-
