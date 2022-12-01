@@ -118,6 +118,18 @@ jobs:
             primary:
               persistence:
                 size: 1Gi              
+              podAnnotations:
+                backup.velero.io/backup-volumes: backup
+                pre.hook.backup.velero.io/command: '["/bin/bash", "-c", " mysqldump --all-databases --user=root --password=${{ secrets.GHOST_DB_ROOT_PASSWORD }} > /scratch/backup.sql"]'
+                pre.hook.backup.velero.io/timeout: 3m
+                post.hook.restore.velero.io/command: '["/bin/bash", "-c", "[ -f \"/scratch/backup.sql\" ] &&  mysql --user=root --password=${{ secrets.GHOST_DB_ROOT_PASSWORD }} < /scratch/backup.sql && rm -f /scratch/backup.sql;"]'
+              extraVolumes:
+                - name: backup
+                  emptyDir:
+                    sizeLimit: 1Gi
+              extraVolumeMounts:
+                - name: backup
+                  mountPath: /scratch                    
           service:
             type: ClusterIP # We'll access it via nginx-ingress-controller
           ingress:
