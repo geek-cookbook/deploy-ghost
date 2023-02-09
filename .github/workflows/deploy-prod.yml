@@ -101,7 +101,7 @@ jobs:
           ghostEmail: ${{ secrets.GHOST_EMAIL }}
           ghostPassword: ${{ secrets.GHOST_PASSWORD }}
           ghostBlogTitle: Funky Penguin
-          ghostEnableHttps: true
+          ghostEnableHttps: false
           updateStrategy: 
             type: Recreate
           smtpHost: ${{ secrets.GHOST_SMTP_HOST }}
@@ -125,6 +125,7 @@ jobs:
             type: ClusterIP # We'll access it via nginx-ingress-controller
           ingress:
             ## Set to true to enable ingress record generation
+            ingressClassName: traefik
             enabled: true
             hostname: '${{ env.INGRESS_HOST }}'
             tls: true
@@ -133,9 +134,7 @@ jobs:
               - '${{ env.INGRESS_HOST }}' 
               secretName: letsencrypt-wildcard-cert
             annotations:
-              kubernetes.io/ingress.class: traefik
               cert-manager.io/cluster-issuer: "letsencrypt-prod"
-              nginx.ingress.kubernetes.io/proxy-body-size: 10m
           persistence:
             enabled: true
             size: 1Gi
